@@ -1,90 +1,77 @@
 # PRODIGY_GA_02
-# Stable Diffusion Image Generation from Text Prompts
+# Image Generation with Pre-trained Models
 
-This repository demonstrates how to use the Stable Diffusion model to generate images based on textual prompts. The notebook uses the `diffusers` library along with `transformers`, `gradio`, and `accelerate` to create and visualize images.
+This notebook demonstrates how to utilize pre-trained generative models like DALL-E mini and Stable Diffusion to create images from text prompts.
 
 ## Requirements
 
-Make sure you have the following packages installed:
+Make sure to have the following libraries installed:
 
-
-## Installation
-
-```bash
-pip install diffusers transformers gradio accelerate
+```python
+!pip install diffusers --upgrade
+!pip install invisible-watermark transformers accelerate safetensors
 ```
-## Importing the libraries
-```bash
-from diffusers import StableDiffusionPipeline
-import matplotlib.pyplot as plt
+# Getting Started
+
+## Import Libraries
+
+Begin by importing the necessary libraries to work with the model:
+
+```python
 import torch
+from diffusers import StableDiffusionPipeline
 ```
-##  Load the Model
+# Load the Pre-trained Model
 
-Choose and load your preferred Stable Diffusion model. In this example, we will use the dreamlike-art model
-``` bash
-model_id1 = "dreamlike-art/dreamlike-diffusion-1.0"
-model_id2 = "stabilityai/stable-diffusion-xl-base-1.0"
+Use the code below to load the Stable Diffusion model:
 
-# Load the pipeline with the desired model
-pipe = StableDiffusionPipeline.from_pretrained(model_id1, torch_dtype=torch.float16, use_safetensors=True)
+```python
+from diffusers import DiffusionPipeline
 
-# Move the pipeline to the GPU for faster processing
-pipe = pipe.to("cuda")
+# Load the Stable Diffusion model
+pipe = DiffusionPipeline.from_pretrained(
+    "stabilityai/stable-diffusion-xl-base-1.0",
+    torch_dtype=torch.float16,
+    use_safetensors=True,
+    variant="fp16"
+)
+pipe.to("cuda")  # Ensure the model is moved to GPU
 ```
+# Define a Text Prompt
 
-## Generate Images from Prompts
+Create a text prompt that describes the image you want to generate:
 
-You can generate images by defining a text prompt. Below are examples of generating images based on two different prompts.
-
-### Example 1: Generating an Image of a Rolls Royce
-``` bash
-# Define your first prompt
-prompt = """dreamlikeart, a black rolls royce Ghost standing near foggy mountains in rain"""
-
-# Generate the image
-image = pipe(prompt).images[0]
-
-# Display the generated image
-print("[PROMPT]: ", prompt)
-plt.imshow(image)
-plt.axis('off')  # Hide the axes
-plt.show()  # Show the image
+```python
+prompt = "An astronaut riding a green horse"
 ```
-### Example 2: Generating an Image of a Beach Vacation
-``` bash
-# Define your second prompt
-prompt2 = """dreamlike, a group of people enjoying vacation at the beach"""
+# Generate the Image
 
-# Generate the image
-image = pipe(prompt2).images[0]
+Use the pipeline to generate an image based on the prompt:
 
-# Display the generated image
-print("[PROMPT]: ", prompt2)
-plt.imshow(image)
-plt.axis('off')  # Hide the axes
-plt.show()  # Show the image
+```python
+images = pipe(prompt=prompt).images[0]
 ```
+# Display the Image
 
+Finally, display the generated image:
+
+```python
+images.show()
+```
 
 ## Usage
 ```bash
 This library is primarily used for generating images using diffusion models. 
 It provides various pipelines for tasks like text-to-image generation.
 ```
-## Note 
-### Adjust the Collab Notebook's settings if you have a intel graphics card to ensure code runs smoothly.
+# Example
 
-```bash 
-STEP 1 : GO TO RUNTIME 
+For instance, using the prompt `"An astronaut riding a green horse"` will generate a unique image that matches this description.
 
-STEP 2 : CLICK ON CHANGE RUNTIME TYPE
+## Notes
 
-STEP 3 : AFTER THAT, CLICK ON THE T4 GPU AND SELECT SAVE TO SAVE THIS SETTING.
+- Ensure you have access to a GPU for optimal performance.
+- Feel free to experiment with different prompts to see a variety of generated images.
 
-```
-## Note 
-### If you have NVIDIA GRAPHICS IN YOUR SYSTEM DO NOT CHANGE THE ABOVE MENTIONED CHANGES TO YOUR COLLAB NOTEBOOK
-## The Google Colab Notebook offers a GPU to provide better graphics for text transformation into images, therefore please complete this work there.
 
 
